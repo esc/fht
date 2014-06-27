@@ -109,7 +109,7 @@ def fht2(arr, axes=(0, 1), dtype=None, normalized=True):
     """
     # axes
     if axes == (0, 1) or axes == (1, 0):
-        return fht1(arr.flatten()).reshape(arr.shape)
+        return fht1(arr.flatten(), normalized=normalized).reshape(arr.shape)
     if not (axes == 0 or axes == 1):
         raise ValueError('axes is either (0, 1) or 0 or 1')
     if arr.ndim != 2:
@@ -171,7 +171,7 @@ def fht3(arr, axes=(0, 1, 2), dtype=None, normalized=True):
     equivalent to identity.
     """
     if np.all(np.sort(axes) == (0, 1, 2)):
-        return fht1(arr.flatten()).reshape(arr.shape)
+        return fht1(arr.flatten(), normalized=normalized).reshape(arr.shape)
     elif np.all(np.sort(axes) == (0, 1)):
         shape = (np.prod(arr.shape[0:2]), arr.shape[2])
         axes = 0
@@ -180,7 +180,7 @@ def fht3(arr, axes=(0, 1, 2), dtype=None, normalized=True):
         axes = 1
     elif np.all(np.sort(axes) == (0, 2)):
         iarr = arr.swapaxes(1, 2)
-        oarr = fht3(iarr, axes=(0, 1))
+        oarr = fht3(iarr, axes=(0, 1), normalized=normalized)
         return oarr.swapaxes(1, 2)
     elif axes == 0:
         shape = (arr.shape[0], np.prod(arr.shape[1:]))
@@ -190,7 +190,7 @@ def fht3(arr, axes=(0, 1, 2), dtype=None, normalized=True):
         axes = 1
     elif axes == 1:
         iarr = arr.swapaxes(1, 2)
-        oarr = fht3(iarr, axes=2)
+        oarr = fht3(iarr, axes=2, normalize=True)
         return oarr.swapaxes(1, 2)
     return fht2(arr.reshape(shape), axes=axes, dtype=dtype, normalized=normalized).reshape(arr.shape)
 
