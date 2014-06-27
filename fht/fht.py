@@ -21,7 +21,7 @@ def fht(arr, **kargs):
     array([ 1.,  1.,  1.,  1.])
     """
     if arr.ndim == 1:
-        return fht1(arr)
+        return fht1(arr, **kargs)
     elif arr.ndim == 2:
         return fht2(arr, **kargs)
     elif arr.ndim == 3:
