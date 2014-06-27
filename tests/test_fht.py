@@ -3,7 +3,7 @@ import numpy as np
 import fht
 
 
-class FhtTestCase:
+class FhtTestCase(object):
     def test_size_2_1(self):
         a = [np.sqrt(2), 0]
         b = [1., 1.]
