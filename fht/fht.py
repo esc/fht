@@ -21,7 +21,10 @@ def fht(arr, **kargs):
     array([ 1.,  1.,  1.,  1.])
     """
     if arr.ndim == 1:
-        return fht1(arr, **kargs)
+        # fht1 doesn't take the axis keyword
+        return fht1(arr,
+                    dtype=kargs.get('dtype'),
+                    normalized=kargs.get('normalize', True))
     elif arr.ndim == 2:
         return fht2(arr, **kargs)
     elif arr.ndim == 3:
