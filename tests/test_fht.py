@@ -54,6 +54,11 @@ class FhtTestCase(object):
         b = [[1, -1], [-1, 1]]
         self.do(a, b)
 
+    def test_2d_wikipedia_example(self):
+        a = [1, 0, 1, 0, 0, 1, 1, 0]
+        b = [1, 0, 0, 0, 0, 0, 0, 0]
+        self.do(a, b)
+
 
 class TestFht(FhtTestCase):
     def do(self, a, b):
