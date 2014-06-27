@@ -3,13 +3,14 @@ __all__ = ["fht", "fht1", "fht2", "fht3", "is_power_of_two"]
 import numpy as np
 import _C_fht_int, _C_fht_long, _C_fht_float, _C_fht_double
 
+
 def fht(arr, **kargs):
     """Fast Hadamard transform
-    
+
     Notes
     -----
     Calls fht1, fht2 or fht3 function according to the dimension of arr
-    
+
     See also
     --------
     fht1, fht2, fht3: specialized function depending of the dimension of arr
@@ -28,12 +29,13 @@ def fht(arr, **kargs):
     else:
         raise NotImplemented('fht not implemented for dimension > 3')
 
+
 def fht1(arr, dtype=None):
     """1-dimensional fast hadamard transform
     Input
     -----
     arr: 1-dimensional array
-    
+
     Output
     ------
     oarr : 1-dimensional array of the size of arr
@@ -76,6 +78,7 @@ def fht1(arr, dtype=None):
     # scale and return
     return (oarr / np.sqrt(arr.size)).astype(dtype)
 
+
 def fht2(arr, axes=(0, 1), dtype=None):
     """2-dimensional fast hadamard transform
 
@@ -83,7 +86,7 @@ def fht2(arr, axes=(0, 1), dtype=None):
     -----
     arr: 2-dimensional array
     axes : (int or tuplue) axes along which is applied the 1d transform
-    
+
     Output
     ------
     oarr : 2-dimensional array of the size of arr
@@ -133,6 +136,7 @@ def fht2(arr, axes=(0, 1), dtype=None):
     # normalize and return
     return (oarr / np.sqrt(arr.shape[axes])).swapaxes(1, axes).astype(dtype)
 
+
 def fht3(arr, axes=(0, 1, 2), dtype=None):
     """3-dimensional fast hadamard transform
 
@@ -140,7 +144,7 @@ def fht3(arr, axes=(0, 1, 2), dtype=None):
     -----
     arr: 3-dimensional array
     axes : (int or tuple) axes along which is applied the 1d transform
-    
+
     Output
     ------
     oarr : 3-dimensional array of the size of arr
@@ -160,7 +164,7 @@ def fht3(arr, axes=(0, 1, 2), dtype=None):
         axes = 1
     elif np.all(np.sort(axes) == (0, 2)):
         iarr = arr.swapaxes(1, 2)
-        oarr = fht3(iarr, axes = (0, 1))
+        oarr = fht3(iarr, axes=(0, 1))
         return oarr.swapaxes(1, 2)
     elif axes == 0:
         shape = (arr.shape[0], np.prod(arr.shape[1:]))
@@ -170,9 +174,10 @@ def fht3(arr, axes=(0, 1, 2), dtype=None):
         axes = 1
     elif axes == 1:
         iarr = arr.swapaxes(1, 2)
-        oarr = fht3(iarr, axes = 2)
+        oarr = fht3(iarr, axes=2)
         return oarr.swapaxes(1, 2)
     return fht2(arr.reshape(shape), axes=axes, dtype=dtype).reshape(arr.shape)
+
 
 def is_power_of_two(input_integer):
     """Test if an integer is a power of two"""
