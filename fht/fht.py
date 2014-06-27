@@ -30,11 +30,12 @@ def fht(arr, **kargs):
         raise NotImplemented('fht not implemented for dimension > 3')
 
 
-def fht1(arr, dtype=None):
+def fht1(arr, dtype=None, normalized=True):
     """1-dimensional fast hadamard transform
     Input
     -----
     arr: 1-dimensional array
+    normalized: (bool) should the transform be normalized
 
     Output
     ------
@@ -42,7 +43,8 @@ def fht1(arr, dtype=None):
 
     Notes
     -----
-    It is normalized so applying twice is equivalent to identity
+    If you set normalized to True it will be normalized so applying twice is
+    equivalent to identity.
     """
     # dimension
     if arr.ndim != 1:
@@ -76,16 +78,20 @@ def fht1(arr, dtype=None):
     # call C function
     _C_fht1(iarr, oarr)
     # scale and return
-    return (oarr / np.sqrt(arr.size)).astype(dtype)
+    if normalized:
+        return (oarr / np.sqrt(arr.size)).astype(dtype)
+    else:
+        return (oarr).astype(dtype)
 
 
-def fht2(arr, axes=(0, 1), dtype=None):
+def fht2(arr, axes=(0, 1), dtype=None, normalized=True):
     """2-dimensional fast hadamard transform
 
     Input
     -----
     arr: 2-dimensional array
     axes : (int or tuplue) axes along which is applied the 1d transform
+    normalized: (bool) should the transform be normalized
 
     Output
     ------
@@ -94,7 +100,9 @@ def fht2(arr, axes=(0, 1), dtype=None):
 
     Notes
     -----
-    It is normalized so applying twice is equivalent to identity
+    If you set normalized to True it will be normalized so applying twice is
+    equivalent to identity.
+
     """
     # axes
     if axes == (0, 1) or axes == (1, 0):
@@ -134,16 +142,20 @@ def fht2(arr, axes=(0, 1), dtype=None):
     # call C function
     _C_fht2(iarr, oarr)
     # normalize and return
-    return (oarr / np.sqrt(arr.shape[axes])).swapaxes(1, axes).astype(dtype)
+    if normalized:
+        return (oarr / np.sqrt(arr.shape[axes])).swapaxes(1, axes).astype(dtype)
+    else:
+        return (oarr).swapaxes(1, axes).astype(dtype)
 
 
-def fht3(arr, axes=(0, 1, 2), dtype=None):
+def fht3(arr, axes=(0, 1, 2), dtype=None, normalized=True):
     """3-dimensional fast hadamard transform
 
     Input
     -----
     arr: 3-dimensional array
     axes : (int or tuple) axes along which is applied the 1d transform
+    normalized: (bool) should the transform be normalized
 
     Output
     ------
@@ -152,7 +164,8 @@ def fht3(arr, axes=(0, 1, 2), dtype=None):
 
     Notes
     -----
-    It is normalized so applying twice is equivalent to identity
+    If you set normalized to True it will be normalized so applying twice is
+    equivalent to identity.
     """
     if np.all(np.sort(axes) == (0, 1, 2)):
         return fht1(arr.flatten()).reshape(arr.shape)
@@ -176,7 +189,7 @@ def fht3(arr, axes=(0, 1, 2), dtype=None):
         iarr = arr.swapaxes(1, 2)
         oarr = fht3(iarr, axes=2)
         return oarr.swapaxes(1, 2)
-    return fht2(arr.reshape(shape), axes=axes, dtype=dtype).reshape(arr.shape)
+    return fht2(arr.reshape(shape), axes=axes, dtype=dtype, normalized=normalized).reshape(arr.shape)
 
 
 def is_power_of_two(input_integer):
